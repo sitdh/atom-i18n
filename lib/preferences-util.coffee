@@ -25,6 +25,16 @@ class PreferencesUtil
     elem.setAttribute('data-localized', 'true')
     elem.setAttribute('data-before-localized', before)
 
+  @applyTextWithOrgChildNode = (elem, text, index=2) ->
+    return unless text
+    return unless elem
+    before = String(elem.childNodes[index].textContent)
+    return if before == text
+    elem.childNodes[index].textContent = text
+    elem.setAttribute('title', text)
+    elem.setAttribute('data-localized', 'true')
+    elem.setAttribute('data-before-localized', before)
+
   @getTextMatchElement = (area, query, text) ->
     elems = area.querySelectorAll(query)
     result
@@ -41,6 +51,11 @@ class PreferencesUtil
       continue unless el
       if !@isAlreadyLocalized(el) || force
         @applyTextWithOrg(el, sh.value)
+    for sh in window.I18N.defS.Settings.sectionHeadingsSpecial
+      el = @getTextMatchElement(sv, '.section-heading ', sh._label)
+      continue unless el
+      # el.childNodes[2].textContent = sh.value
+      @applyTextWithOrgChildNode(el,sh.value)
     for sh in window.I18N.defS.Settings.subSectionHeadings
       el = @getTextMatchElement(sv, '.sub-section-heading', sh._label)
       continue unless el
