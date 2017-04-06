@@ -15,22 +15,15 @@ class PreferencesUtil
     @applyTextWithOrg(span, text)
     sh.appendChild(span)
 
-  @applyTextWithOrg = (elem, text) ->
+  @applyTextWithOrg = (elem, text, childIndex) ->
     return unless text
     return unless elem
-    before = String(elem.textContent)
+    before = if not childIndex then String(elem.textContent) else String(elem.childNodes[childIndex].textContent)
     return if before == text
-    elem.innerHTML = text    # NOTE text may contain HTML
-    elem.setAttribute('title', text)
-    elem.setAttribute('data-localized', 'true')
-    elem.setAttribute('data-before-localized', before)
-
-  @applyTextWithOrgChildNode = (elem, text, index=2) ->
-    return unless text
-    return unless elem
-    before = String(elem.childNodes[index].textContent)
-    return if before == text
-    elem.childNodes[index].textContent = text
+    if not childIndex
+      elem.innerHTML = text    # NOTE text may contain HTML
+    else
+      elem.childNodes[childIndex].textContent = text
     elem.setAttribute('title', text)
     elem.setAttribute('data-localized', 'true')
     elem.setAttribute('data-before-localized', before)
@@ -54,8 +47,8 @@ class PreferencesUtil
     for sh in window.I18N.defS.Settings.sectionHeadingsSpecial
       el = @getTextMatchElement(sv, '.section-heading ', sh._label)
       continue unless el
-      # el.childNodes[2].textContent = sh.value
-      @applyTextWithOrgChildNode(el,sh.value)
+      if !@isAlreadyLocalized(el) || force
+        @applyTextWithOrg(el, sh.value, 2)
     for sh in window.I18N.defS.Settings.subSectionHeadings
       el = @getTextMatchElement(sv, '.sub-section-heading', sh._label)
       continue unless el
