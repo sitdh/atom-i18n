@@ -43,12 +43,7 @@ class PreferencesUtil
       el = @getTextMatchElement(sv, '.section-heading', sh._label)
       continue unless el
       if !@isAlreadyLocalized(el) || force
-        @applyTextWithOrg(el, sh.value)
-    for sh in window.I18N.defS.Settings.sectionHeadingsSpecial
-      el = @getTextMatchElement(sv, '.section-heading ', sh._label)
-      continue unless el
-      if !@isAlreadyLocalized(el) || force
-        @applyTextWithOrg(el, sh.value, 2)
+        @applyTextWithOrg(el, sh.value, sh._childIndex)
     for sh in window.I18N.defS.Settings.subSectionHeadings
       el = @getTextMatchElement(sv, '.sub-section-heading', sh._label)
       continue unless el
