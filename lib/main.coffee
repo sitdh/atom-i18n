@@ -25,8 +25,8 @@ class I18N
     @defW = CSON.load path.join __dirname, "../def", LOCALE, "welcome.cson"
 
   activate: (state) ->
-    setTimeout(@delay, 0)
-    setTimeout(@customMenuI18n, 3000)
+    setTimeout(@delay, 3000)
+    setTimeout(@customMenuI18n, 5000)
 
     atom.commands.add 'atom-workspace', 'atom-i18n:open-custom-menu-i18n-file', =>
       atom.workspace.open atom.config.get('atom-i18n.customMenuI18nPath' )
